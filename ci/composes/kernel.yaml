@@ -1,0 +1,89 @@
+version: "3.8"
+services:
+  app:
+    build:
+      dockerfile: ci/dockerfiles/kernel.Dockerfile
+      context: ../..
+    ports:
+      - "8000:8000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  migrate:
+    build:
+      dockerfile: ci/dockerfiles/kernel.Dockerfile
+      context: ../..
+    entrypoint: ["./manage.py", "migrate"]
+    depends_on:
+      - db
+      - queue
+      #- cache
+
+  createsuperuser:
+    build:
+      dockerfile: ci/dockerfiles/kernel.Dockerfile
+      context: ../..
+    entrypoint: [ "./manage.py", "createsuperuser", "--username", "admin", "--email", "ryndak.lukasz7@gmail.com", "--noinput" ]
+    environment:
+      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD:-test}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  worker:
+    build:
+      dockerfile: ci/dockerfiles/kernel.Dockerfile
+      context: ../..
+    entrypoint: ["celery", "-A", "kernel", "worker", "--loglevel=debug"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    deploy:
+      mode: replicated
+      replicas: 5
+
+  scheduler:
+    build:
+      dockerfile: ci/dockerfiles/kernel.Dockerfile
+      context: ../..
+    entrypoint: ["celery", "-A", "kernel", "beat", "--loglevel=info"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  flower:
+    build:
+      dockerfile: ci/dockerfiles/kernel.Dockerfile
+      context: ../..
+    entrypoint: ["celery", "-A", "kernel", "flower", "--loglevel=debug"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    ports:
+      - "5555:5555"
+
+  queue:
+    image: rabbitmq:3.8.9-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+      RABBITMQ_DEFAULT_VHOST: backend
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "postgres"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 80s
