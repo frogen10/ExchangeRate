@@ -10,15 +10,24 @@ services:
       migrate:
         condition: service_completed_successfully
 
+  make_migration:
+    build:
+      dockerfile: ci/dockerfiles/kernel.Dockerfile
+      context: ../..
+    entrypoint: ["./manage.py", "makemigrations", "exchange"]
+    depends_on:
+      - db
+      - queue
+      #- cache
+
   migrate:
     build:
       dockerfile: ci/dockerfiles/kernel.Dockerfile
       context: ../..
     entrypoint: ["./manage.py", "migrate"]
     depends_on:
-      - db
-      - queue
-      #- cache
+      make_migration:
+        condition: service_completed_successfully
 
   createsuperuser:
     build:

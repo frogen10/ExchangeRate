@@ -155,7 +155,7 @@ dev = ["polib"]
 
 [[package]]
 name = "django"
-version = "4.2.7"
+version = "4.2.9"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
 category = "main"
 optional = false
@@ -237,7 +237,7 @@ tests = ["freezegun", "pytest", "pytest-cov"]
 
 [[package]]
 name = "kombu"
-version = "5.3.4"
+version = "5.3.5"
 description = "Messaging library for Python."
 category = "main"
 optional = false
@@ -249,7 +249,7 @@ vine = "*"
 
 [package.extras]
 azureservicebus = ["azure-servicebus (>=7.10.0)"]
-azurestoragequeues = ["azure-identity (>=1.12.0)", "azure-storage-queue (>=12.6.0)"]
+azurestoragequeues = ["azure-storage-queue (>=12.6.0)", "azure-identity (>=1.12.0)"]
 confluentkafka = ["confluent-kafka (>=2.2.0)"]
 consul = ["python-consul2"]
 librabbitmq = ["librabbitmq (>=2.0.0)"]
@@ -277,7 +277,7 @@ twisted = ["twisted"]
 
 [[package]]
 name = "prompt-toolkit"
-version = "3.0.41"
+version = "3.0.43"
 description = "Library for building powerful interactive command lines in Python"
 category = "main"
 optional = false
@@ -288,7 +288,7 @@ wcwidth = "*"
 
 [[package]]
 name = "psycopg"
-version = "3.1.13"
+version = "3.1.17"
 description = "PostgreSQL database adapter for Python"
 category = "main"
 optional = false
@@ -299,12 +299,20 @@ typing-extensions = ">=4.1"
 tzdata = {version = "*", markers = "sys_platform == \"win32\""}
 
 [package.extras]
-binary = ["psycopg-binary (==3.1.13)"]
-c = ["psycopg-c (==3.1.13)"]
-dev = ["black (>=23.1.0)", "dnspython (>=2.1)", "flake8 (>=4.0)", "mypy (>=1.4.1)", "types-setuptools (>=57.4)", "wheel (>=0.37)"]
+binary = ["psycopg-binary (==3.1.17)"]
+c = ["psycopg-c (==3.1.17)"]
+dev = ["black (>=23.1.0)", "codespell (>=2.2)", "dnspython (>=2.1)", "flake8 (>=4.0)", "mypy (>=1.4.1)", "types-setuptools (>=57.4)", "wheel (>=0.37)"]
 docs = ["Sphinx (>=5.0)", "furo (==2022.6.21)", "sphinx-autobuild (>=2021.3.14)", "sphinx-autodoc-typehints (>=1.12)"]
 pool = ["psycopg-pool"]
 test = ["anyio (>=3.6.2,<4.0)", "mypy (>=1.4.1)", "pproxy (>=2.7)", "pytest (>=6.2.5)", "pytest-cov (>=3.0)", "pytest-randomly (>=3.5)"]
+
+[[package]]
+name = "psycopg2"
+version = "2.9.9"
+description = "psycopg2 - Python-PostgreSQL Database Adapter"
+category = "main"
+optional = false
+python-versions = ">=3.7"
 
 [[package]]
 name = "python-crontab"
@@ -363,7 +371,7 @@ test = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "tornado"
-version = "6.3.3"
+version = "6.4"
 description = "Tornado is a Python web framework and asynchronous networking library, originally developed at FriendFeed."
 category = "main"
 optional = false
@@ -371,7 +379,7 @@ python-versions = ">= 3.8"
 
 [[package]]
 name = "typing-extensions"
-version = "4.8.0"
+version = "4.9.0"
 description = "Backported and Experimental Type Hints for Python 3.8+"
 category = "main"
 optional = false
@@ -379,7 +387,7 @@ python-versions = ">=3.8"
 
 [[package]]
 name = "tzdata"
-version = "2023.3"
+version = "2023.4"
 description = "Provider of IANA time zone data"
 category = "main"
 optional = false
@@ -395,7 +403,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "wcwidth"
-version = "0.2.12"
+version = "0.2.13"
 description = "Measures the displayed width of unicode strings in a terminal"
 category = "main"
 optional = false
@@ -404,7 +412,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "256f7e7abf77c0cb8f265a10c7e4148337b5888b759395d1503f7c447a6aefab"
+content-hash = "4749656bcb1a6a3c66cf0dd58a9ed86669e7129583fc957245b88fb36101195a"
 
 [metadata.files]
 amqp = []
@@ -427,6 +435,7 @@ kombu = []
 prometheus-client = []
 prompt-toolkit = []
 psycopg = []
+psycopg2 = []
 python-crontab = []
 python-dateutil = []
 pytz = []
