@@ -3,11 +3,12 @@ name = "hurtownia"
 version = "0.1.0"
 description = ""
 authors = ["Łukasz Ryndak", "Dominik Cibor", "Mateusz Szozda"]
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
 psycopg = "^3.1.13"
-Django = "^4.2.7"
+django = "^4.2.9"
 celery = "^5.3.6"
 django-celery-beat = "^2.5.0"
 django-celery-results = "^2.5.1"

@@ -1,7 +1,8 @@
-FROM python:3.10.12-bookworm AS kernel
+FROM python:3.11-bookworm AS kernel
 WORKDIR /app
 COPY ./ci/requirements/requirements.txt .
 RUN apt update && apt install -y tree
+RUN pip install psycopg2-binary --force-reinstall --no-cache-dir
 RUN pip install -r requirements.txt && rm -f requirements.txt
 COPY ./backend .
 EXPOSE 8000
