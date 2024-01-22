@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import pytz
-import mpld3
+from email.mime.image import MIMEImage
+from matplotlib.figure import Figure
 
 class Email():
     
@@ -20,12 +20,13 @@ class Email():
         smtpObj = smtplib.SMTP_SSL(address, port)
         plot = Plot()
         fig = plot.GetPlot()
-        
+        plot_filename = 'sin_wave_plot.png'
+        fig.savefig(plot_filename)
         print(smtpObj.login(login, appPassword))
         message = ""
         for i in plot.tab:
             print(i, plot.tab[i])
-            message += i+"->Max:"+str(plot.tab[i][0]) + "Min: "+ str(plot.tab[i][1]) +"\n"
+            message += i+"->Max:"+str(plot.tab[i][0])+" Min:"+str(plot.tab[i][1])+"\n"
             
         
         msg = MIMEMultipart()
@@ -33,8 +34,12 @@ class Email():
         msg['From'] = 'HurtowniaDanych@yandex.com'
         msg['To'] = 'HurtowniaDanych@yandex.com'
         msg.attach(MIMEText(message))
-        msg.attach(MIMEText(fig, 'html'))
 
+        with open(plot_filename, 'rb') as attachment:
+            image = MIMEImage(attachment.read())
+            image.add_header('Content-Disposition', f'attachment; filename={plot_filename}')
+            msg.attach(image)
+            
         smtpObj.sendmail('HurtowniaDanych@yandex.com',
                     'HurtowniaDanych@yandex.com', msg.as_string()
                     )
@@ -55,12 +60,12 @@ class Plot():
     def __init__(self) -> None:
         self.tab ={}
     
-    def GetPlot(self)->str:
+    def GetPlot(self)->Figure:
         date = datetime.today().date() - timedelta(days=30)
         ax:Axes
         fig, ax = plt.subplots()
         days = []
-        for single_date in (date + timedelta(n) for n in range(30)):
+        for single_date in (date + timedelta(n) for n in range(31)):
             if(single_date.weekday()!=6 and single_date.weekday()!=5):
                 days.append(single_date.strftime(r'%m-%d'))
         print(days)
@@ -71,12 +76,18 @@ class Plot():
             for j in exchange:
                 ind = days.index(j.date.strftime(r'%m-%d'))
                 values[ind] = j.value
-            self.tab[i[1]] = self.FinMinAndMax(values)
-            ax.plot(days, values, label=i[1])
+            result=[]
+            daysResult=[]
+            for j in range(len(values)):
+                if values[j]!=0.0:
+                    result.append(values[j])
+                    daysResult.append(days[j])
+            self.tab[i[1]] = self.FinMinAndMax(result)
+            ax.plot(daysResult, result, label=i[1])
             
-        ax.set_xticklabels(days)
+        ax.set_xticklabels(daysResult)
         ax.set(xlabel='Dzień tygodnia', ylabel='Cena',
             title='Kursy walut')
         ax.legend()
         ax.grid()
-        return mpld3.fig_to_html(fig)
+        return fig
