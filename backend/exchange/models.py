@@ -6,6 +6,12 @@ from datetime import datetime, date
 from django.db.models.manager import BaseManager
 import pytz
 
+EXCHANGE_TYPE =  (
+     ("mid", "średnia"),
+     ("bid", "kupno"),
+     ("ask", "sprzedaż"),
+)
+
 EXCHANGE_NAME = (
      ("EUR", "EUR - euro"),
      ("USD", "USD - dolar"),
@@ -14,12 +20,8 @@ EXCHANGE_NAME = (
      )
 # Create your models here.
 class Exchange(models.Model):
-     
-     id = models.UUIDField( 
-          primary_key = True, 
-          default = uuid.uuid4, 
-          editable = False) 
      name = models.CharField(max_length=3, choices=EXCHANGE_NAME)
+     type = models.CharField(max_length=3, choices=EXCHANGE_TYPE)
      value = models.FloatField(max_length=250)
      date = models.DateField(editable= True)
      createdOn = models.DateTimeField(auto_now_add=True)

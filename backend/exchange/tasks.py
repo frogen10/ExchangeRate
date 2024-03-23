@@ -49,3 +49,5 @@ def checkData():
                 start_date += delta
         except Exception as ex:
             print("Exception: ", ex)
+    plot = Plot()
+    plot.GetPlot()

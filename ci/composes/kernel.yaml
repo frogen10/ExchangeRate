@@ -9,16 +9,26 @@ services:
     depends_on:
       migrate:
         condition: service_completed_successfully
-
-  make_migration:
+  
+  frontend:
     build:
-      dockerfile: ci/dockerfiles/kernel.Dockerfile
+      dockerfile: ci/dockerfiles/frontend.Dockerfile
       context: ../..
-    entrypoint: ["./manage.py", "makemigrations", "exchange"]
+    ports:
+      - "5000:5000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  makemigration:
+    build:
+      dockerfile: ci/dockerfiles/kernel.Dockerfile 
+      context: ../..
+    entrypoint: ["./manage.py", "makemigrations", "client", "exchange"]
     depends_on:
       - db
       - queue
-      #- cache
+
 
   migrate:
     build:
@@ -26,7 +36,7 @@ services:
       context: ../..
     entrypoint: ["./manage.py", "migrate"]
     depends_on:
-      make_migration:
+      makemigration:
         condition: service_completed_successfully
 
   createsuperuser:
@@ -40,23 +50,20 @@ services:
       migrate:
         condition: service_completed_successfully
 
-  worker:
-    build:
-      dockerfile: ci/dockerfiles/kernel.Dockerfile
-      context: ../..
-    entrypoint: ["celery", "-A", "kernel", "worker", "--loglevel=debug"]
-    depends_on:
-      migrate:
-        condition: service_completed_successfully
-    deploy:
-      mode: replicated
-      replicas: 5
-
   scheduler:
     build:
       dockerfile: ci/dockerfiles/kernel.Dockerfile
       context: ../..
     entrypoint: ["celery", "-A", "kernel", "beat", "--loglevel=info"]
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  worker:
+    build:
+      dockerfile: ci/dockerfiles/kernel.Dockerfile
+      context: ../..
+    entrypoint: ["celery", "-A", "kernel", "worker", "--loglevel=debug"]
     depends_on:
       migrate:
         condition: service_completed_successfully
