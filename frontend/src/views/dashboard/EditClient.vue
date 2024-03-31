@@ -4,8 +4,8 @@
             <ul>
                 <li><router-link to="/dashboard">Dashboard</router-link></li>
                 <li><router-link to="/dashboard/clients">Clients</router-link></li>
-                <li><router-link :to="{ name: 'Client', params: { id: client.id }}">{{ client.name }}</router-link></li>
-                <li class="is-active"><router-link :to="{ name: 'EditClient', params: { id: client.id }}" aria-current="true">Edit</router-link></li>
+                <li><router-link :to="{ name: 'Client', params: { id: this.$route.params.id }}">{{ client.name }}</router-link></li>
+                <li class="is-active"><router-link :to="{ name: 'EditClient', params: { id: this.$route.params.id }}" aria-current="true">Edit</router-link></li>
             </ul>
         </nav>
 
