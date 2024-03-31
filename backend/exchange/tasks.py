@@ -1,5 +1,5 @@
 
-from exchange.models import EXCHANGE_NAME, getDataByDate
+from exchange.models import EXCHANGE_NAME, EXCHANGE_TYPE, getDataByDate
 from exchange.email import Email, Plot
 from exchange.api import NBP
 from kernel.celery import app
@@ -25,6 +25,7 @@ def getData():
             ex.save()
         except Exception as ex:
             print("Exception: ", ex)
+            
 
 @app.task
 def checkData():
@@ -49,5 +50,4 @@ def checkData():
                 start_date += delta
         except Exception as ex:
             print("Exception: ", ex)
-    plot = Plot()
-    plot.GetPlot()
+            

@@ -2,11 +2,12 @@
   <div id="wrapper">
     <nav class="navbar is-dark">
       <div class="navbar-brand">
-        <router-link to="/" class="navbar-item"><strong>Invoicely</strong></router-link>
+        <router-link to="/" class="navbar-item"><strong>ExchangeRate</strong></router-link>
       </div>
 
       <div class="navbar-menu">
         <div class="navbar-end">
+          <router-link to="/about" class="navbar-item">About</router-link>
           <template v-if="$store.state.isAuthenticated">
             <router-link to="/dashboard" class="navbar-item">Dashboard</router-link>
             <router-link to="/dashboard/clients" class="navbar-item">Clients</router-link>
@@ -39,7 +40,7 @@
     </section>
 
     <footer class="footer">
-      <p class="has-text-centered">Copyright (c) 2021</p>
+      <p class="has-text-centered">Copyright (c) 2024</p>
     </footer>
   </div>
 </template>

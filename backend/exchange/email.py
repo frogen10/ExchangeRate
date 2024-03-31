@@ -78,7 +78,7 @@ class Plot():
             print(len(exchange))
             for j in exchange:
                 ind = days.index(j.date.strftime(r'%Y-%m-%d'))
-                values[ind] = j.value
+                values[ind] = j.midValue
             print(days, values)
             result=[]
             daysResult=[]

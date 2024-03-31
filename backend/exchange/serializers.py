@@ -12,7 +12,8 @@ class ExchangeSerializer(serializers.ModelSerializer):
         fields =(
             "id",
             "name",
-            "value",
+            "midValue",
+            "bidValue",
+            "askValue",
             "date",
-            "type"
         )

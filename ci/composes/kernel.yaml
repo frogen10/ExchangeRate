@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   app:
     build:
@@ -20,24 +19,14 @@ services:
       migrate:
         condition: service_completed_successfully
 
-  makemigration:
-    build:
-      dockerfile: ci/dockerfiles/kernel.Dockerfile 
-      context: ../..
-    entrypoint: ["./manage.py", "makemigrations", "client", "exchange"]
-    depends_on:
-      - db
-      - queue
-
-
   migrate:
     build:
       dockerfile: ci/dockerfiles/kernel.Dockerfile
       context: ../..
     entrypoint: ["./manage.py", "migrate"]
     depends_on:
-      makemigration:
-        condition: service_completed_successfully
+      - db
+      - queue
 
   createsuperuser:
     build:
