@@ -4,10 +4,9 @@ import Dashboard from '../views/dashboard/Dashboard.vue'
 import MyAccount from '../views/dashboard/MyAccount.vue'
 import SignUp from '../views/SignUp.vue'
 import LogIn from '../views/LogIn.vue'
-import Clients from '../views/dashboard/Clients.vue'
-import Client from '../views/dashboard/Client.vue'
 import AddClient from '../views/dashboard/AddClient.vue'
 import EditClient from '../views/dashboard/EditClient.vue'
+import Calculator from '../views/dashboard/Calculator.vue'
 
 import store from '../store'
 
@@ -44,15 +43,7 @@ const routes = [
     }
   },
   {
-    path: '/dashboard/clients',
-    name: 'Clients',
-    component: Clients,
-    meta: {
-      requireLogin: true
-    }
-  },
-  {
-    path: '/dashboard/clients/add',
+    path: '/dashboard/my-account/add',
     name: 'AddClient',
     component: AddClient,
     meta: {
@@ -60,15 +51,7 @@ const routes = [
     }
   },
   {
-    path: '/dashboard/clients/:id',
-    name: 'Client',
-    component: Client,
-    meta: {
-      requireLogin: true
-    }
-  },
-  {
-    path: '/dashboard/clients/:id/edit',
+    path: '/dashboard/my-account/:id/edit',
     name: 'EditClient',
     component: EditClient,
     meta: {
@@ -82,6 +65,11 @@ const routes = [
     meta: {
       requireLogin: true
     }
+  },
+  {
+    path: '/calculator',
+    name: 'Calculator',
+    component: Calculator,
   }
 ]
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from django.contrib.auth.models import User
 from .models import Client
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -12,14 +12,12 @@ class ClientSerializer(serializers.ModelSerializer):
         ),
         fields = (
             "id",
-            "name",
-            "email",
-            "org_number",
+            "number",
+            "first_name",
+            "last_name",
             "address1",
             "address2",
             "zipcode",
             "place",
             "country",
-            "contact_person",
-            "contact_reference",
         )

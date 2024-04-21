@@ -2,34 +2,31 @@
     <div class="page-add-client">
         <nav class="breadcrumb" aria-label="breadcrumbs">
             <ul>
-                <li><router-link to="/dashboard">Dashboard</router-link></li>
-                <li><router-link to="/dashboard/clients">Clients</router-link></li>
-                <li class="is-active"><router-link to="/dashboard/clients/add" aria-current="true">Add</router-link></li>
+                <li><router-link :to="{name:'Dashboard'}">Dashboard</router-link></li>
+                <li><router-link :to="{name:'MyAccount'}">Clients</router-link></li>
+                <li class="is-active"><router-link :to="{name:'AddClient'}" aria-current="true">Edit Profile</router-link></li>
             </ul>
         </nav>
 
         <div class="columns is-multiline">
             <div class="column is-12">
-                <h1 class="title">Add client</h1>
+                <h1 class="title">Edit Profile - {{ client.first_name }}</h1>
             </div>
-
             <div class="column is-6">
                 <div class="field">
-                    <label>Name</label>
+                    <label>First Name</label>
                     
                     <div class="control">
-                        <input type="text" name="name" class="input" v-model="client.name">
+                        <input type="text" name="first_name" class="input" v-model="client.first_name">
                     </div>
                 </div>
-
                 <div class="field">
-                    <label>Email</label>
+                    <label>Last Name</label>
                     
                     <div class="control">
-                        <input type="email" name="email" class="input" v-model="client.email">
+                        <input type="text" name="last_name" class="input" v-model="client.last_name">
                     </div>
                 </div>
-
                 <div class="field">
                     <label>Address 1</label>
                     
@@ -71,6 +68,13 @@
                         <input type="text" name="country" class="input" v-model="client.country">
                     </div>
                 </div>
+                <div class="field">
+                    <label>Number</label>
+                    
+                    <div class="control">
+                        <input type="text" name="number" class="input" v-model="client.number">
+                    </div>
+                </div>
             </div>
 
             <div class="column is-12">
@@ -109,7 +113,7 @@ export default {
                         position: 'bottom-right',
                     })
 
-                    this.$router.push('/dashboard/clients')
+                    this.$router.push('/dashboard/my-account')
                 })
                 .catch(error => {
                     console.log(JSON.stringify(error))

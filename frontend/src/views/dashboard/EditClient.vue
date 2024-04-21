@@ -2,35 +2,32 @@
     <div class="page-add-client">
         <nav class="breadcrumb" aria-label="breadcrumbs">
             <ul>
-                <li><router-link to="/dashboard">Dashboard</router-link></li>
-                <li><router-link to="/dashboard/clients">Clients</router-link></li>
-                <li><router-link :to="{ name: 'Client', params: { id: this.$route.params.id }}">{{ client.name }}</router-link></li>
-                <li class="is-active"><router-link :to="{ name: 'EditClient', params: { id: this.$route.params.id }}" aria-current="true">Edit</router-link></li>
+                <li><router-link :to="{ name: 'Dashboard'}">Dashboard</router-link></li>
+                <li><router-link :to="{ name: 'MyAccount'}">My account</router-link></li>
+                <li class="is-active"><router-link :to="{ name: 'EditClient', params: { id: route.params.id }}" aria-current="true">Edit Profile</router-link></li>
             </ul>
         </nav>
 
         <div class="columns is-multiline">
             <div class="column is-12">
-                <h1 class="title">Edit - {{ client.name }}</h1>
+                <h1 class="title">Edit Profile - {{ client.first_name }}</h1>
             </div>
 
             <div class="column is-6">
                 <div class="field">
-                    <label>Name</label>
+                    <label>First Name</label>
                     
                     <div class="control">
-                        <input type="text" name="name" class="input" v-model="client.name">
+                        <input type="text" name="first_name" class="input" v-model="client.first_name">
                     </div>
                 </div>
-
                 <div class="field">
-                    <label>Email</label>
+                    <label>Last Name</label>
                     
                     <div class="control">
-                        <input type="email" name="email" class="input" v-model="client.email">
+                        <input type="text" name="last_name" class="input" v-model="client.last_name">
                     </div>
                 </div>
-
                 <div class="field">
                     <label>Address 1</label>
                     
@@ -72,6 +69,13 @@
                         <input type="text" name="country" class="input" v-model="client.country">
                     </div>
                 </div>
+                <div class="field">
+                    <label>Country</label>
+                    
+                    <div class="control">
+                        <input type="text" name="number" class="input" v-model="client.number">
+                    </div>
+                </div>
             </div>
 
             <div class="column is-12">
@@ -85,54 +89,44 @@
     </div>
 </template>
 
-<script>
-import axios from 'axios'
-import { toast } from 'bulma-toast'
 
-export default {
-    name: 'EditClient',
-    data() {
-        return {
-            client: {}
-        }
-    },
-    mounted() {
-        this.getClient()
-    },
-    methods: {
-        getClient() {
-            const clientID = this.$route.params.id
+<script setup>
+import { ref, onBeforeMount, computed } from 'vue';
+import axios from 'axios';
+import { toast } from 'bulma-toast';
+import { useRouter, useRoute } from 'vue-router';
+const router = useRouter();
+const route = useRoute();
 
-            axios
-                .get(`/api/v1/clients/${clientID}`)
-                .then(response => {
-                    this.client = response.data
-                })
-                .catch(error => {
-                    console.log(JSON.stringify(error))
-                })
-        },
-        submitForm() {
-            const clientID = this.$route.params.id
+const client = ref({});
+const getClient = async () => {
+    const clientID = route.params.id;
+    await axios.get(`/api/v1/clients/${clientID}`)
+            .then(response => {
+                client.value = response.data
+            })
+            .catch(error => {
+                console.log(JSON.stringify(error))
+            })
+    };
+onBeforeMount(getClient);
 
-            axios
-                .patch(`/api/v1/clients/${clientID}/`, this.client)
-                .then(response => {
-                    toast({
-                        message: 'The changes was saved',
-                        type: 'is-success',
-                        dismissible: true,
-                        pauseOnHover: true,
-                        duration: 2000,
-                        position: 'bottom-right',
-                    })
-                    
-                    this.$router.push('/dashboard/clients')
-                })
-                .catch(error => {
-                    console.log(JSON.stringify(error))
-                })
-        }
+const submitForm = async () => {
+    const clientID = route.params.id;
+
+    try {
+        await axios.patch(`/api/v1/clients/${clientID}/`, client.value);
+        toast({
+            message: 'The changes were saved',
+            type: 'is-success',
+            dismissible: true,
+            pauseOnHover: true,
+            duration: 2000,
+            position: 'bottom-right',
+        });
+        router.push('/dashboard/clients');
+    } catch (error) {
+        console.log(JSON.stringify(error));
     }
-}
+};
 </script>

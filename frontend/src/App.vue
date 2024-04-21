@@ -7,16 +7,13 @@
 
       <div class="navbar-menu">
         <div class="navbar-end">
-          <router-link to="/about" class="navbar-item">About</router-link>
+          <router-link :to="{name:'About'}" class="navbar-item">About</router-link>
+          <router-link :to="{name:'Calculator'}" class="navbar-item">Calculator</router-link>
           <template v-if="$store.state.isAuthenticated">
-            <router-link to="/dashboard" class="navbar-item">Dashboard</router-link>
-            <router-link to="/dashboard/clients" class="navbar-item">Clients</router-link>
-            <router-link to="/dashboard/invoices" class="navbar-item">Invoices</router-link>
-
+            <router-link :to="{name:'Dashboard'}" class="navbar-item">Dashboard</router-link>
             <div class="navbar-item">
               <div class="buttons">
-                <router-link to="/dashboard/invoices/add" class="button is-success">Add invoice</router-link>
-                <router-link to="/dashboard/my-account" class="button is-light">My account</router-link>
+                <router-link :to="{name:'MyAccount'}" class="button is-light">My account</router-link>
               </div>
             </div>      
           </template>
@@ -26,8 +23,8 @@
 
             <div class="navbar-item">
               <div class="buttons">
-                <router-link to="/sign-up" class="button is-success"><strong>Sign up</strong></router-link>
-                <router-link to="/log-in" class="button is-light">Log in</router-link>
+                <router-link :to="{name:'SignUp'}" class="button is-success"><strong>Sign up</strong></router-link>
+                <router-link :to="{name:'LogIn'}" class="button is-light">Log in</router-link>
               </div>
             </div> 
           </template>

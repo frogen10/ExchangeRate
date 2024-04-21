@@ -32,73 +32,61 @@
 
                 <hr>
 
-                <router-link to="/sign-up">Click here</router-link> to sign up!
+                <router-link :to="{name:'SignUp'}">Click here</router-link> to sign up!
             </div>
         </div>
     </div>
 </template>
 
-<script>
-import axios from 'axios'
+<script setup>
+import { ref, onBeforeMount, computed } from 'vue';
+import axios from 'axios';
+import { toast } from 'bulma-toast';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-export default {
-    name: 'LogIn',
-    data() {
-        return {
-            username: '',
-            password: '',
-            errors: []
-        }
-    },
-    methods: {
-        async submitForm(e) {
-            axios.defaults.headers.common["Authorization"] = ""
+const store = useStore();
+const router = useRouter();
+const username = ref('');
+const password = ref('');
+const errors = ref([]);
+async function submitForm(e) 
+{
+    axios.defaults.headers.common["Authorization"] = ""
 
-            localStorage.removeItem("token")
+    localStorage.removeItem("token")
 
-            const formData = {
-                username: this.username,
-                password: this.password
+    const formData = {
+        username: username.value,
+        password: password.value
+    }
+
+    try {
+        const response = await axios.post("/api/v1/token/login/", formData);
+        const token = response.data.auth_token;
+        store.commit('setToken', token);
+        axios.defaults.headers.common["Authorization"] = `Token ${token}`;
+        localStorage.setItem("token", token);
+        const userResponse = await axios.get("/api/v1/users/me");
+        const userData = userResponse.data;
+
+        store.commit('setUser', { 'username': userData.username, 'id': userData.id });
+
+        localStorage.setItem('username', userData.username);
+        localStorage.setItem('userid', userData.id);
+
+        router.push('/dashboard');
+    } catch (error) {
+        if (error.response) {
+            for (const property in error.response.data) {
+                errors.value.push(`${property}: ${error.response.data[property]}`);
             }
 
-            await axios
-                .post("/api/v1/token/login/", formData)
-                .then(response => {
-                    const token = response.data.auth_token
-
-                    this.$store.commit('setToken', token)
-                    
-                    axios.defaults.headers.common["Authorization"] = "Token " + token
-
-                    localStorage.setItem("token", token)
-                })
-                .catch(error => {
-                    if (error.response) {
-                        for (const property in error.response.data) {
-                            this.errors.push(`${property}: ${error.response.data[property]}`)
-                        }
-
-                        console.log(JSON.stringify(error.response.data))
-                    } else if (error.message) {
-                        console.log(JSON.stringify(error.message))
-                    } else {
-                        console.log(JSON.stringify(error))
-                    }
-                })
-
-            axios
-                .get("/api/v1/users/me")
-                .then(response => {
-                    this.$store.commit('setUser', {'username': response.data.username, 'id': response.data.id})
-
-                    localStorage.setItem('username', response.data.username)
-                    localStorage.setItem('userid', response.data.id)
-
-                    this.$router.push('/dashboard')
-                })
-                .catch(error => {
-                    console.log(JSON.stringify(error))
-                })
+            console.log(JSON.stringify(error.response.data));
+        } else if (error.message) {
+            console.log(JSON.stringify(error.message));
+        } else {
+            console.log(JSON.stringify(error));
         }
     }
 }

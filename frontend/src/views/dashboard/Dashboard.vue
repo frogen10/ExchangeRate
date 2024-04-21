@@ -43,34 +43,9 @@
     </div>
 </template>
 
-<script>
-import axios from 'axios'
+<script setup>
+import { ref, onBeforeMount, computed } from 'vue';
+import axios from 'axios';
 
-export default {
-    name: 'Dashboard',
-    data() {
-        return {
-            clients: [],
-        }
-    },
-    mounted() {
-        this.getClients()
-    },
-    methods: {
-        getClients() {
-            axios
-                .get('/api/v1/clients/')
-                .then(response => {
-                    for (let i = 0; i < response.data.length; i++) {
-                        if (this.clients.length <= 5) {
-                            this.clients.push(response.data[i])
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.log(JSON.stringify(error))
-                })
-        }
-    }
-}
+const clients = ref([]);
 </script>

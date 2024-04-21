@@ -12,7 +12,7 @@
                         <p class="is-size-2 mb-2">{{ exchange.midValue }}</p>
                     </div>
                     <div class="column is-narrow">
-                        <button class="button box is-size-4 mb-4" >Sell {{ exchange.bidValue }}</button>
+                        <button class="button box is-size-4 mb-4">Sell {{ exchange.bidValue }}</button>
                         <button class="button box is-size-4 mb-4">Buy {{ exchange.askValue }}</button>
                     </div>
     </div>
@@ -23,39 +23,24 @@
   </div>
 </template>
 
-<script>
-import axios from 'axios'
-import LogIn from './LogIn.vue';
-import { computed } from 'vue';
+<script setup>
+import { ref, onBeforeMount } from 'vue';
+import axios from 'axios';
 
-export default {
-  name: 'Home',
-  data() {
-    return {
-        exchanges: [],
-        exchanges2: [],
-        groups: {}
+const exchanges = ref([]);
+
+const getExchange = async () => {
+    try {
+        const response = await axios.get('/api/v1/exchange/?top=1', {
+            credentials: 'omit'
+        });
+        for (let i = 0; i < response.data.length; i++) {
+            exchanges.value.push(response.data[i]);
         }
-    },
-    mounted() {
-        this.getExchange()
-    },
-    methods: {
-        getExchange() {
-            axios
-                .get('/api/v1/exchange/?top=1',{ 
-                credentials: 'omit'
-                })
-                .then(response => {
-                    for (let i = 0; i < response.data.length; i++) {
-                        this.exchanges.push(response.data[i])
-                    }
-                })
-                .catch(error => {
-                    console.log(JSON.stringify(error))
-                })
-        }
-        
+    } catch (error) {
+        console.log(JSON.stringify(error));
     }
-}
+};
+
+onBeforeMount(getExchange);
 </script>

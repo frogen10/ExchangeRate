@@ -37,5 +37,5 @@ class NBP():
             raise Exception(response.status_code)
         bidValue = data["rates"][0]["bid"]
         askValue = data["rates"][0]["ask"]
-        exchange = Exchange(name=value, midValue = midVal, bidValue= bidValue, askValue = askValue, date = dat.date())
+        exchange = Exchange(name=value, midValue=midVal, bidValue=bidValue, askValue=askValue, date=dat.date())
         return exchange

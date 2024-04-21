@@ -13,14 +13,15 @@ EXCHANGE_TYPE =  (
 )
 
 EXCHANGE_NAME = (
-     ("EUR", "EUR - euro"),
-     ("USD", "USD - dolar"),
-     ("GBP", "GBP - funt brytyjski"),
-     ("CHF", "CHF - frank szwajcarski")
+     ("EUR", "euro"),
+     ("USD", "dolar amerykański"),
+     ("GBP", "funt brytyjski"),
+     ("CHF", "frank szwajcarski")
      )
 # Create your models here.
 class Exchange(models.Model):
      name = models.CharField(max_length=3, choices=EXCHANGE_NAME)
+     currency = models.CharField(max_length=250, null=False, editable=False)
      midValue = models.FloatField(max_length=250, null=True)
      bidValue = models.FloatField(max_length=250, null=True)
      askValue = models.FloatField(max_length=250, null=True)
@@ -28,6 +29,14 @@ class Exchange(models.Model):
      createdOn = models.DateTimeField(auto_now_add=True)
      modifiedOn = models.DateTimeField(auto_now_add=True)
      
+     def save(self, *args, **kwargs):
+        # Set the currency based on the name
+        for i in EXCHANGE_NAME:
+               if self.name == i[0]:
+                    self.currency = i[1]
+                    break
+        super().save(*args, **kwargs)
+
      def __str__(self):
         return self.name +" "+self.date.strftime(r'%Y-%m-%d')
 

@@ -1,12 +1,14 @@
 from django.shortcuts import render
 
 from rest_framework import viewsets 
-
+from django.contrib.auth.models import User
 from .serializers import ClientSerializer
-from .models import Client
+from .models import Client 
+from rest_framework.permissions import AllowAny
 
 from django.core.exceptions import PermissionDenied
-
+import logging
+logger = logging.getLogger(__name__)
 class ClientViewSet(viewsets.ModelViewSet):
     serializer_class = ClientSerializer
     queryset = Client.objects.all()

@@ -7,7 +7,7 @@ class ExchangeSerializer(serializers.ModelSerializer):
         model = Exchange
         read_only_fields = (
             "createdOn",
-            "modifiedOn",
+            "modifiedOn"
         ),
         fields =(
             "id",
@@ -16,4 +16,5 @@ class ExchangeSerializer(serializers.ModelSerializer):
             "bidValue",
             "askValue",
             "date",
+            "currency"
         )

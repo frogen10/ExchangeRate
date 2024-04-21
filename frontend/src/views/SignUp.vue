@@ -5,6 +5,7 @@
                 <h1 class="title">Sign up</h1>
 
                 <form @submit.prevent="submitForm">
+                   
                     <div class="field">
                         <label>E-mail</label>
                         <div class="control">
@@ -26,6 +27,13 @@
                         </div>
                     </div>
 
+                    <div class="field">
+                        <label>Repeat Password</label>
+                        <div class="control">
+                            <input type="password" name="password" class="input" v-model="password2">
+                        </div>
+                    </div>
+
                     <div class="notification is-danger" v-if="errors.length">
                         <p 
                             v-for="error in errors" 
@@ -44,54 +52,60 @@
 
                 <hr>
 
-                <router-link to="/log-in">Click here</router-link> to log in!
+                <router-link :to="{name:'LogIn'}">Click here</router-link> to log in!
             </div>
         </div>
     </div>
 </template>
 
-<script>
-import axios from 'axios'
+<script setup>
+import { ref, onBeforeMount, computed } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
-export default {
-    name: 'SignUp',
-    data () {
-        return {
-            email: '',
-            username: '',
-            password: '',
-            errors: []
-        }
-    },
-    methods: {
-        submitForm(e) {
-            const formData = {
-                email: this.email,
-                username: this.username,
-                password: this.password
-            }
+const client = ref({
+    first_name: '',
+    last_name: '',
+    address1: '',
+    address2: '',
+    zipcode: '',
+    place: '',
+    country: '',
+    number: ''
+});
+const email = ref('');
+const username = ref('');
+const password = ref('');
+const password2 = ref('');
+const errors = ref([]);
 
-            axios
-                .post("/api/v1/users/", formData)
-                .then(response => {
-                    console.log(response)
-
-                    this.$router.push('/log-in')
-                })
-                .catch(error => {
-                    if (error.response) {
-                        for (const property in error.response.data) {
-                            this.errors.push(`${property}: ${error.response.data[property]}`)
-                        }
-
-                        console.log(JSON.stringify(error.response.data))
-                    } else if (error.message) {
-                        console.log(JSON.stringify(error.message))
-                    } else {
-                        console.log(JSON.stringify(error))
-                    }
-                })
-        }
+function submitForm(e) 
+{
+    if (password.value !== password2.value) {
+        errors.value.push("Passwords do not match")
+        return
     }
+    const formData = {
+        email: email.value,
+        username: username.value,
+        password: password.value
+    }
+
+    axios
+        .post("/api/v1/users/", formData)
+        .then(response => {
+            console.log(response)
+            router.push('/log-in')
+        })
+        .catch(error => {
+            if (error.response) {
+                console.log(JSON.stringify(error.response.data))
+            } else if (error.message) {
+                console.log(JSON.stringify(error.message))
+            } else {
+                console.log(JSON.stringify(error))
+            }
+        })
 }
 </script>
