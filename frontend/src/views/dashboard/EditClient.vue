@@ -124,7 +124,7 @@ const submitForm = async () => {
             duration: 2000,
             position: 'bottom-right',
         });
-        router.push('/dashboard/clients');
+        router.push('/dashboard/my-account');
     } catch (error) {
         console.log(JSON.stringify(error));
     }

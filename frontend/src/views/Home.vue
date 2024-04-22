@@ -3,18 +3,22 @@
     <h1 class="title">Welcome to ExchangeRate</h1>
     <template v-if="exchanges.length>0">
     <div
-                class="box columns is-mobile is-multiline is-centered mb-4"
                 v-for="exchange in exchanges"
                 v-bind:key="exchange.id"
             >
+                <router-link :to="{ name:'Currency', params: { code:exchange.name }}">
+                    <div
+                class="box columns is-mobile is-multiline is-centered mb-4">
                     <div class="column is-narrow">
                         <p class="is-size-4 mb-4">{{ exchange.name }}</p>
                         <p class="is-size-2 mb-2">{{ exchange.midValue }}</p>
                     </div>
                     <div class="column is-narrow">
-                        <button class="button box is-size-4 mb-4">Sell {{ exchange.bidValue }}</button>
-                        <button class="button box is-size-4 mb-4">Buy {{ exchange.askValue }}</button>
+                        <router-link :to="{ name:'SellCurrency', params: { code:exchange.name }}" class="button box is-size-4 mb-4">Sell {{ exchange.bidValue }}</router-link>
+                        <router-link :to="{ name:'BuyCurrency', params: { code:exchange.name }}" class="button box is-size-4 mb-4">Buy {{ exchange.askValue }}</router-link>
                     </div>
+                </div>
+                </router-link>
     </div>
     </template>
     <template v-else>
@@ -26,6 +30,7 @@
 <script setup>
 import { ref, onBeforeMount } from 'vue';
 import axios from 'axios';
+import SellCurrency from './dashboard/SellCurrency.vue';
 
 const exchanges = ref([]);
 

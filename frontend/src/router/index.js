@@ -7,6 +7,9 @@ import LogIn from '../views/LogIn.vue'
 import AddClient from '../views/dashboard/AddClient.vue'
 import EditClient from '../views/dashboard/EditClient.vue'
 import Calculator from '../views/dashboard/Calculator.vue'
+import Currency from '../views/dashboard/Currency.vue'
+import BuyCurrency from '../views/dashboard/BuyCurrency.vue'
+import SellCurrency from '../views/dashboard/SellCurrency.vue'
 
 import store from '../store'
 
@@ -54,6 +57,30 @@ const routes = [
     path: '/dashboard/my-account/:id/edit',
     name: 'EditClient',
     component: EditClient,
+    meta: {
+      requireLogin: true
+    }
+  },
+  {
+    path: '/:code',
+    name: 'Currency',
+    component: Currency,
+    meta: {
+      requireLogin: true
+    }
+  },
+  {
+    path: '/:code/buy',
+    name: 'BuyCurrency',
+    component: BuyCurrency,
+    meta: {
+      requireLogin: true
+    }
+  },
+  {
+    path: '/:code/sell',
+    name: 'SellCurrency',
+    component: SellCurrency,
     meta: {
       requireLogin: true
     }
