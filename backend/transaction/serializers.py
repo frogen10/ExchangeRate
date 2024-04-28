@@ -12,17 +12,20 @@ class BalanceSerializer(serializers.ModelSerializer):
         fields =(
             "id",
             "value",
+            "currency"
         )
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         read_only_fields = (
-            "createdOn",
-            "modifiedOn",
-            "exchange",
+            "created_by", 
         ),
         fields =(
             "id",
+            "type",
             "value",
+            "from_currency",
+            "to_currency",
+            "created_at",
         )

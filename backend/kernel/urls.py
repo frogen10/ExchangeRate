@@ -22,5 +22,6 @@ urlpatterns = [
     path('api/v1/', include('exchange.urls')),
     path('api/v1/', include('djoser.urls')),
     path('api/v1/', include('djoser.urls.authtoken')),
-    path('api/v1/', include('client.urls'))
+    path('api/v1/', include('client.urls')),
+    path('api/v1/', include('transaction.urls'))
 ]

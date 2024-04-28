@@ -13,10 +13,11 @@ EXCHANGE_TYPE =  (
 )
 
 EXCHANGE_NAME = (
-     ("EUR", "euro"),
-     ("USD", "dolar amerykański"),
-     ("GBP", "funt brytyjski"),
-     ("CHF", "frank szwajcarski")
+     ("PLN", "Polish zloty"),
+     ("EUR", "Euro"),
+     ("USD", "American dollar"),
+     ("GBP", "British pound"),
+     ("CHF", "Swiss franc"),
      )
 # Create your models here.
 class Exchange(models.Model):

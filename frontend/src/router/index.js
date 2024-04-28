@@ -10,7 +10,7 @@ import Calculator from '../views/dashboard/Calculator.vue'
 import Currency from '../views/dashboard/Currency.vue'
 import BuyCurrency from '../views/dashboard/BuyCurrency.vue'
 import SellCurrency from '../views/dashboard/SellCurrency.vue'
-
+import ChangeBalance from '../views/dashboard/ChangeBalance.vue'
 import store from '../store'
 
 const routes = [
@@ -54,7 +54,7 @@ const routes = [
     }
   },
   {
-    path: '/dashboard/my-account/:id/edit',
+    path: '/dashboard/my-account/edit',
     name: 'EditClient',
     component: EditClient,
     meta: {
@@ -89,6 +89,14 @@ const routes = [
     path: '/dashboard/my-account',
     name: 'MyAccount',
     component: MyAccount,
+    meta: {
+      requireLogin: true
+    }
+  },
+  {
+    path: '/dashboard/my-account/changeBalance',
+    name: 'ChangeBalance',
+    component: ChangeBalance,
     meta: {
       requireLogin: true
     }

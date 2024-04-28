@@ -55,3 +55,10 @@ class ExchangeNowViewSet(viewsets.ReadOnlyModelViewSet):
             if(tops >0):
                 self.queryset = getData(tops)
         return self.queryset
+    
+    def perform_create(self, serializer):
+        serializer.save()
+    
+    def perform_update(self, serializer):
+        obj = self.get_object()
+        serializer.save()

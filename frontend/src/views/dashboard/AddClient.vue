@@ -75,6 +75,17 @@
                         <input type="text" name="number" class="input" v-model="client.number">
                     </div>
                 </div>
+                <div class="field">
+                    <label>Default currency</label>
+                    
+                    <div class="control">
+                        <select class="is-size-4 mb-4" name="in_currency" v-model="client.default_currency">
+                            <option v-for="currency in currencies" :key="currency.name" :value="currency.name">
+                                {{ currency.name }} - {{ currency.currency }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <div class="column is-12">
@@ -88,37 +99,45 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import axios from 'axios'
 import { toast } from 'bulma-toast'
-
-export default {
-    name: 'AddClient',
-    data() {
-        return {
-            client: {}
-        }
-    },
-    methods: {
-        submitForm() {
-            axios
-                .post("/api/v1/clients/", this.client)
-                .then(response => {
-                    toast({
-                        message: 'The client was added',
-                        type: 'is-success',
-                        dismissible: true,
-                        pauseOnHover: true,
-                        duration: 2000,
-                        position: 'bottom-right',
-                    })
-
-                    this.$router.push('/dashboard/my-account')
-                })
-                .catch(error => {
-                    console.log(JSON.stringify(error))
-                })
-        }
+import { useRouter } from 'vue-router'
+import { ref, onBeforeMount } from 'vue';
+const currencies = ref([]);
+const client = ref({})
+const router = useRouter();
+const getExchange = async () => {
+    try {
+        const response = await axios.get('/api/v1/exchange/?top=1', {
+            credentials: 'omit'
+        });
+        currencies.value = response.data;
+    } catch (error) {
+        console.log(JSON.stringify(error));
     }
-}
+};
+
+async function submitForm() 
+{
+    await axios
+        .post("/api/v1/clients/", client.value)
+        .then(response => {
+            toast({
+                message: 'The client was added',
+                type: 'is-success',
+                dismissible: true,
+                pauseOnHover: true,
+                duration: 2000,
+                position: 'bottom-right',
+            })
+            router.push('/dashboard/my-account')
+        })
+        .catch(error => {
+            console.log(JSON.stringify(error))
+        })
+};
+onBeforeMount(async()=>{
+    await getExchange();
+});
 </script>

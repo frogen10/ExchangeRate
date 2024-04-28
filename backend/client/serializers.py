@@ -20,4 +20,5 @@ class ClientSerializer(serializers.ModelSerializer):
             "zipcode",
             "place",
             "country",
+            "default_currency"
         )

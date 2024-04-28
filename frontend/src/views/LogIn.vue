@@ -50,6 +50,21 @@ const router = useRouter();
 const username = ref('');
 const password = ref('');
 const errors = ref([]);
+
+async function GetClient() 
+  {
+    await axios.get(`/api/v1/clients/`)
+      .then(response => {
+        localStorage.setItem('clientid', response.data[0].id);
+        localStorage.setItem('default_currency', response.data[0].default_currency);
+        store.commit('setClient', { 'id': response.data[0].id, 'default_currency': response.data[0].default_currency});
+      })
+      .catch(error => {
+          console.log(JSON.stringify(error))
+          store.state.client = null
+      })
+  }
+
 async function submitForm(e) 
 {
     axios.defaults.headers.common["Authorization"] = ""
@@ -74,7 +89,7 @@ async function submitForm(e)
 
         localStorage.setItem('username', userData.username);
         localStorage.setItem('userid', userData.id);
-
+        await GetClient();
         router.push('/dashboard');
     } catch (error) {
         if (error.response) {

@@ -1,5 +1,5 @@
 
-from exchange.models import EXCHANGE_NAME, EXCHANGE_TYPE, getDataByDate
+from exchange.models import EXCHANGE_NAME, EXCHANGE_TYPE, getDataByDate, getDataByTypeName,Exchange
 from exchange.email import Email, Plot
 from exchange.api import NBP
 from kernel.celery import app
@@ -17,7 +17,7 @@ def sendEmail():
 @app.task
 def getData():
     api = NBP()
-    for i in EXCHANGE_NAME:
+    for i in EXCHANGE_NAME[1:]:
         try:
             if datetime.now().weekday()==5 or datetime.now().weekday()==6:
                 break
@@ -30,7 +30,7 @@ def getData():
 @app.task
 def checkData():
     api = NBP()
-    for i in EXCHANGE_NAME:
+    for i in EXCHANGE_NAME[1:]:
         try:
             end_date: datetime
             end_date = datetime.today().date()
@@ -50,4 +50,12 @@ def checkData():
                 start_date += delta
         except Exception as ex:
             print("Exception: ", ex)
+    exchange = getDataByTypeName(EXCHANGE_NAME[0][0], 1)
+    if(exchange.count()<1):
+        try:
+            exchange = Exchange(name=EXCHANGE_NAME[0][0], midValue=1, bidValue=1, askValue=1, date=datetime.today().date())
+            exchange.save()
+        except Exception as ex:
+            print("Exception: ", ex)
+    
             

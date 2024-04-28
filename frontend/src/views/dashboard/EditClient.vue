@@ -4,7 +4,7 @@
             <ul>
                 <li><router-link :to="{ name: 'Dashboard'}">Dashboard</router-link></li>
                 <li><router-link :to="{ name: 'MyAccount'}">My account</router-link></li>
-                <li class="is-active"><router-link :to="{ name: 'EditClient', params: { id: route.params.id }}" aria-current="true">Edit Profile</router-link></li>
+                <li class="is-active"><router-link :to="{ name: 'EditClient' }" aria-current="true">Edit Profile</router-link></li>
             </ul>
         </nav>
 
@@ -76,6 +76,17 @@
                         <input type="text" name="number" class="input" v-model="client.number">
                     </div>
                 </div>
+                <div class="field">
+                    <label>Default currency</label>
+                    
+                    <div class="control">
+                        <select class="is-size-4 mb-4" name="in_currency" v-model="client.default_currency">
+                            <option v-for="currency in currencies" :key="currency.name" :value="currency.name">
+                                {{ currency.name }} - {{ currency.currency }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <div class="column is-12">
@@ -95,12 +106,15 @@ import { ref, onBeforeMount, computed } from 'vue';
 import axios from 'axios';
 import { toast } from 'bulma-toast';
 import { useRouter, useRoute } from 'vue-router';
+import { useStore } from 'vuex';
+
+const store = useStore();
 const router = useRouter();
 const route = useRoute();
-
+const currencies = ref([]);
 const client = ref({});
 const getClient = async () => {
-    const clientID = route.params.id;
+    const clientID = store.state.client.id;
     await axios.get(`/api/v1/clients/${clientID}`)
             .then(response => {
                 client.value = response.data
@@ -109,10 +123,25 @@ const getClient = async () => {
                 console.log(JSON.stringify(error))
             })
     };
-onBeforeMount(getClient);
+
+const getExchange = async () => {
+    try {
+        const response = await axios.get('/api/v1/exchange/?top=1', {
+            credentials: 'omit'
+        });
+        currencies.value = response.data;
+    } catch (error) {
+        console.log(JSON.stringify(error));
+    }
+};
+onBeforeMount(
+    async()=>{
+        await getClient();
+        await getExchange();
+    });
 
 const submitForm = async () => {
-    const clientID = route.params.id;
+    const clientID = store.state.client.id;
 
     try {
         await axios.patch(`/api/v1/clients/${clientID}/`, client.value);
