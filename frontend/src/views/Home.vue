@@ -42,6 +42,10 @@ const getExchange = async () => {
             {
                 exchanges.value.push(response.data[i]);
             }
+            else
+            {
+                console.log('Default currency found: '+store.state.client.default_currency);
+            }
         }
     } catch (error) {
         console.log(JSON.stringify(error));
