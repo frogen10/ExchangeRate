@@ -16,6 +16,15 @@ services:
     ports:
       - "5000:5000"
     depends_on:
+      install:
+        condition: service_completed_successfully
+  
+  install:
+    build:
+      dockerfile: ci/dockerfiles/frontend.Dockerfile
+      context: ../..
+    entrypoint: ["npm", "install"]
+    depends_on:
       migrate:
         condition: service_completed_successfully
 
@@ -23,7 +32,7 @@ services:
     build:
       dockerfile: ci/dockerfiles/kernel.Dockerfile
       context: ../..
-    entrypoint: ["./manage.py", "migrate"]
+    entrypoint: ["python", "./manage.py", "migrate"]
     depends_on:
       - db
       - queue
@@ -32,7 +41,7 @@ services:
     build:
       dockerfile: ci/dockerfiles/kernel.Dockerfile
       context: ../..
-    entrypoint: [ "./manage.py", "createsuperuser", "--username", "admin", "--email", "ryndak.lukasz7@gmail.com", "--noinput" ]
+    entrypoint: [ "python", "./manage.py", "createsuperuser", "--username", "admin", "--email", "ryndak.lukasz7@gmail.com", "--noinput" ]
     environment:
       DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD:-test}
     depends_on:

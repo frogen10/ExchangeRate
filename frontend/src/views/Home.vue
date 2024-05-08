@@ -37,14 +37,24 @@ const getExchange = async () => {
         const response = await axios.get('/api/v1/exchange/?top=1', {
             credentials: 'omit'
         });
+        const default_currency = ref('PLN');
+        if(store.state.client && store.state.client.default_currency)
+        {
+            console.log('Default currency found: '+store.state.client.default_currency);
+            default_currency.value = store.state.client.default_currency;
+        }
+        else
+        {
+            console.log('Default currency not found');
+        }
         for (let i = 0; i < response.data.length; i++) {
-            if(store.state.client.default_currency && response.data[i].name !== store.state.client.default_currency)
+            if(response.data[i].name !== default_currency.value)
             {
                 exchanges.value.push(response.data[i]);
             }
             else
             {
-                console.log('Default currency found: '+store.state.client.default_currency);
+                console.log('Default currency: '+default_currency.value);
             }
         }
     } catch (error) {
