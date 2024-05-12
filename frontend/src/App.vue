@@ -9,7 +9,7 @@
         <div class="navbar-end">
           <router-link :to="{name:'About'}" class="navbar-item">About</router-link>
           <router-link :to="{name:'Calculator'}" class="navbar-item">Calculator</router-link>
-          <template v-if="$store.state.isAuthenticated">
+          <template v-if="store.state.isAuthenticated">
             <router-link :to="{name:'Dashboard'}" class="navbar-item">Dashboard</router-link>
             <div class="navbar-item">
               <div class="buttons">
@@ -42,23 +42,51 @@
   </div>
 </template>
 
-<script>
-  import axios from 'axios'
+<script setup>
+import { ref, onMounted, onBeforeMount, onUnmounted, computed, watch } from 'vue';
+import axios from 'axios';
+import { useStore } from 'vuex';
+import { useRouter, useRoute } from 'vue-router';
 
-  export default {
-    name: 'App',
-    beforeCreate() {
-      this.$store.commit('initializeStore')
+const store = useStore();
+store.commit('initializeStore')
 
-      const token = this.$store.state.token
+const token = store.state.token
+const transactionStatus = ref('Pending');
+let intervalId = null;
+const timer = ref(10);
+if (token) {
+  axios.defaults.headers.common['Authorization'] = "Token " + token
+} else {
+  axios.defaults.headers.common['Authorization'] = ""
+}
+const route = useRoute();
+const router = useRouter();
 
-      if (token) {
-        axios.defaults.headers.common['Authorization'] = "Token " + token
-      } else {
-        axios.defaults.headers.common['Authorization'] = ""
-      }
+onMounted(() => {
+  intervalId = setInterval(async() => {
+    if (timer.value > 0) {
+      timer.value--;
+    } else {
+      await axios.get('/api/v1/exchange/?refresh=1', {
+      credentials: 'omit'
+      }).then(response => {
+        transactionStatus.value = 'Completed';
+        console.log("Refreshed" +" " + route.name);
+        timer.value = 10;
+        if(route.name === 'Home') {
+          console.log("Refreshed" +" " + route.name);
+          router.go(0);
+        }
+      }).catch(error => {
+        console.log(JSON.stringify(error));
+      });
     }
-  }
+  }, 1000);
+})
+onUnmounted(() => {
+  clearInterval(intervalId);
+})
 </script>
 
 <style lang="scss">

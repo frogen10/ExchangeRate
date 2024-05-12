@@ -27,7 +27,7 @@
                             <th>{{ index + 1 }}</th>
                             <th>{{ transaction.type }}</th>
                             <th>{{ transaction.value }}</th>
-                            <th>{{ transaction.created_at }}</th>
+                            <th>{{ moment(String(transaction.created_at)).format('YYYY-MM-DD HH:mm') }}</th>
                             <th>{{ transaction.from_currency.name }}</th>
                             <th>{{ transaction.to_currency.name }}</th>
                             <th>{{ (transaction.value * transaction.from_currency.bidValue/transaction.to_currency.askValue).toFixed(4) }}</th>
@@ -42,6 +42,7 @@
 <script setup>
 import { ref, onBeforeMount, computed } from 'vue';
 import axios from 'axios';
+import moment from 'moment';
 
 const transactions = ref([]);
 const getTransactions = async () => {

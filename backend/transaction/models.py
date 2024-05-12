@@ -19,7 +19,7 @@ class Transaction(models.Model):
         # Decrease the balance of the from_currency.
         Balance.objects.filter(created_by=self.created_by, currency=self.from_currency.name).update(value=F('value') - self.value)
         # Increase the balance of the to_currency.
-        Balance.objects.filter(created_by=self.created_by, currency=self.to_currency.name).update(value=F('value') + self.value * self.from_currency.bidValue / self.to_currency.askValue)
+        Balance.objects.filter(created_by=self.created_by, currency=self.to_currency.name).update(value=round(F('value') + (self.value * self.from_currency.askValue / self.to_currency.bidValue)))
 
     def __str__(self):
         return str(self.value)+self.from_currency.name +" = "+str(self.value*self.from_currency.bidValue/self.to_currency.askValue)+" "+self.to_currency.name + " " + self.type

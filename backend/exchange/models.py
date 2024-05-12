@@ -26,7 +26,7 @@ class Exchange(models.Model):
      midValue = models.FloatField(max_length=250, null=True)
      bidValue = models.FloatField(max_length=250, null=True)
      askValue = models.FloatField(max_length=250, null=True)
-     date = models.DateField(editable= True)
+     date = models.DateTimeField(editable= True)
      createdOn = models.DateTimeField(auto_now_add=True)
      modifiedOn = models.DateTimeField(auto_now_add=True)
      
@@ -51,14 +51,14 @@ def getDataByName(dateQuery:date, nameQuery:str)->BaseManager[Exchange]:
      return exchange
 
 def getDataByTypeName(nameQuery:str, top:int)->BaseManager[Exchange]:
-     exchange = Exchange.objects.filter(name=nameQuery).order_by('createdOn')[:top]
+     exchange = Exchange.objects.filter(name=nameQuery).order_by('-date')[:top]
      return exchange
 
 def getData(top:int)->BaseManager[Exchange]:
      print(top)
      exchange = []
      for i in EXCHANGE_NAME:
-          exchange2 = Exchange.objects.filter(name=i[0]).order_by('createdOn')[:top]
+          exchange2 = Exchange.objects.filter(name=i[0]).order_by('-date')[:top]
           exchange.extend(exchange2)
      return exchange
 
