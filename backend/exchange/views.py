@@ -31,6 +31,7 @@ class ExchangeViewSet(viewsets.ReadOnlyModelViewSet):
         name =self.request.GET.get("name")
         top = self.request.GET.get("top")
         refresh = self.request.GET.get("refresh")
+        period = self.request.GET.get("period")
         tops: int
         if(top != None):
             tops = int(top)
@@ -53,4 +54,7 @@ class ExchangeViewSet(viewsets.ReadOnlyModelViewSet):
                 )
                 exchange2.save()
             self.queryset = getData(1)
+
+        elif(period != None):
+            pass
         return self.queryset
