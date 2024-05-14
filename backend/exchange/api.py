@@ -1,7 +1,7 @@
 from django.db import models
 import requests
 from exchange.models import Exchange
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class NBP():
     def get(self, value= "USD", date = datetime.today()) -> Exchange:
@@ -23,9 +23,9 @@ class NBP():
             data = response.json()
         else:
             # Błąd podczas pobierania danych
-            raise Exception(response.status_code)
-        
-        dat = datetime.strptime(data["rates"][0]["effectiveDate"], r"%Y-%m-%d")
+            return self.get(value, date - timedelta(days=1))
+            
+
         midVal = data["rates"][0]["mid"]
         
         response = requests.get(site2)
@@ -34,8 +34,8 @@ class NBP():
             data = response.json()
         else:
             # Błąd podczas pobierania danych
-            raise Exception(response.status_code)
+            return self.get(value, date - timedelta(days=1))
         bidValue = data["rates"][0]["bid"]
         askValue = data["rates"][0]["ask"]
-        exchange = Exchange(name=value, midValue=midVal, bidValue=bidValue, askValue=askValue, date=dat)
+        exchange = Exchange(name=value, midValue=midVal, bidValue=bidValue, askValue=askValue, date=date)
         return exchange

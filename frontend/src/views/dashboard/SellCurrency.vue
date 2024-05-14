@@ -1,20 +1,28 @@
 <template>
-    <h1 class="title">Buy Currency {{ route.params.code }}</h1>
-    <div>
-        <label for="currency">Currency:</label>
+    <h1 class="title">Sell Currency {{ route.params.code }}</h1>
+    <div class="columns">
+      <div class="column is-half">
+        <label class="m-2" for="currency">Currency:</label>
+        <div class="m-2">
+          <label for="currency">Currency:</label>
           <select id="currency" v-model="toCurrency">
-          <option v-for="currency in exchanges" :key="currency.name" :value="currency.name">
-            {{ currency.name }} - {{ currency.currency }}
-          </option>
+            <option v-for="currency in exchanges" :key="currency.name" :value="currency.name">
+              {{ currency.name }} - {{ currency.currency }}
+            </option>
           </select>
+        </div>
+        <div style="clear: both;"></div>
+        <div class="m-2">
           <label for="value">Value:</label>
           <input id="value" v-model.number="transactionValue" type="number" required>
-          <p>Balance: {{ balance.value }} -> {{ balance.value - transactionValue }}</p>
-          <p class="is-size-2 is-col-span-2 is-centered">
-              {{transactionValue}} {{ route.params.code }} = {{ result }} {{toCurrency}} 
-          </p>
-          <button class="button is-success" @click="makeTransaction">Submit</button>
-        <p>Time left: {{ timer }}</p>
+        </div>
+        <p class="m-2">Balance: {{ balance.value }} -> {{ balance.value - transactionValue }}</p>
+        <p class="m-2">
+          {{transactionValue}} {{ route.params.code }} = {{ result }} {{toCurrency}} 
+        </p>
+        <button class="button is-success" @click="makeTransaction">Submit</button>
+        <p class="m-2">Time left: {{ timer }}</p>
+        </div>
     </div>
 </template>
     

@@ -47,7 +47,7 @@ def getData(dateQuery:date)-> BaseManager[Exchange]:
 
 def getDataByName(dateQuery:date, nameQuery:str)->BaseManager[Exchange]:
      print(dateQuery, nameQuery)
-     exchange = Exchange.objects.filter(date__range=[dateQuery, datetime.today().date()], name=nameQuery)
+     exchange = Exchange.objects.filter(date__range=[dateQuery, datetime.now()], name=nameQuery)
      return exchange
 
 def getDataByTypeName(nameQuery:str, top:int)->BaseManager[Exchange]:

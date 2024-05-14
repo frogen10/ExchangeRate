@@ -39,14 +39,14 @@ def checkData():
             delta = timedelta(days=1)
             print(start_date,end_date)
             while start_date <= end_date:
-                if start_date.weekday()!=5 and start_date.weekday()!=6:
-                    data = getDataByDate(start_date,i[0])
-                    if data.count()<1:
-                        try:
-                            exchange = api.get(i[0], start_date)
-                            exchange.save()
-                        except Exception as ex:
-                            print("Exception: ", ex)
+                data = getDataByDate(start_date,i[0])
+                if data.count()<1:
+                    try:
+                        exchange = api.get(i[0], start_date)
+                        exchange.save()
+                    except Exception as ex:
+                        print("Exception: ", ex)
+                    
                 start_date += delta
         except Exception as ex:
             print("Exception: ", ex)
