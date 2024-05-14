@@ -65,9 +65,7 @@ const routes = [
     path: '/:code',
     name: 'Currency',
     component: Currency,
-    meta: {
-      requireLogin: true
-    }
+
   },
   {
     path: '/:code/buy',
