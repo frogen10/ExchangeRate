@@ -98,14 +98,20 @@ function submitForm(e)
             console.log(response)
             router.push('/log-in')
         })
-        .catch(error => {
-            if (error.response) {
-                console.log(JSON.stringify(error.response.data))
-            } else if (error.message) {
-                console.log(JSON.stringify(error.message))
-            } else {
-                console.log(JSON.stringify(error))
+        .catch(error =>  {
+        if (error.response) {
+            errors.value = [];
+            for (const property in error.response.data) {
+                errors.value.push(`${property}: ${error.response.data[property]}`);
             }
+
+            console.log(JSON.stringify(error.response.data));
+        } else if (error.message) {
+            console.log(JSON.stringify(error.message));
+        } else {
+            console.log(JSON.stringify(error));
+        }
+         
         })
 }
 </script>

@@ -93,6 +93,7 @@ async function submitForm(e)
         router.push('/dashboard');
     } catch (error) {
         if (error.response) {
+            errors.value = [];
             for (const property in error.response.data) {
                 errors.value.push(`${property}: ${error.response.data[property]}`);
             }

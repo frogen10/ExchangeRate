@@ -74,7 +74,7 @@ onMounted(() => {
         transactionStatus.value = 'Completed';
         console.log("Refreshed" +" " + route.name);
         timer.value = 10;
-        if(route.name === 'Home') {
+        if(route.name === 'Home' || route.name === "Currency") {
           console.log("Refreshed" +" " + route.name);
           router.go(0);
         }
