@@ -23,7 +23,7 @@ Portfele walutowe: Przechowywanie różnych walut w jednym miejscu.
 Informacje o walutach: Dostęp do informacji o różnych walutach.
 
 Użyte Api:
-https://nbp.api
+https://api.nbp.pl
 
 Użyte biblioteki:
 chartjs
