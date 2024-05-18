@@ -22,5 +22,15 @@ Alerty kursowe: Ustawianie alertów mailowych o zmianach kursów walut.
 Portfele walutowe: Przechowywanie różnych walut w jednym miejscu.
 Informacje o walutach: Dostęp do informacji o różnych walutach.
 
+Użyte Api:
+https://nbp.api
+
+Użyte biblioteki:
+chartjs
+vue-chartjs
+moment
+axios
+bulma
+
 
 Projekt Figma: https://www.figma.com/file/IKnl2tkyrUZsTmGiTXwPz3/projekt-1?type=design&node-id=123-41&mode=design&t=7cYSGJBIifzZGjYR-0
